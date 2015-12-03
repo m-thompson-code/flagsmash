@@ -1,0 +1,11 @@
+{% load bootstrap3 %}
+<form action="/playermatchform/" method="post" class="form">
+    {% csrf_token %}
+    {% bootstrap_form player_match_form %}
+    {% bootstrap_form player_match_form2 %}
+    {% buttons %}
+    <button type="submit" class="btn btn-primary btn-lg">
+        Submit
+    </button>
+    {% endbuttons %}
+</form>
