@@ -1,0 +1,115 @@
+{% extends 'main/base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+{% block nav_tournaments_active %}
+class="active"
+{% endblock %}
+{% block body %}
+<section id="inner-headline">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="pageTitle">Tournaments</h2>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="content">
+<div class="container content">
+    <div class="row"> 
+        <div class="col-md-12">
+            <h3>Tournament Submit Form (admin viewable only)</h3>
+            <form action="/tournaments/" method="post" class="form">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                {% buttons %}
+                <button type="submit" class="btn btn-color">
+                    Submit Tournament
+                </button>
+                {% endbuttons %}
+            </form> 
+        </div>
+    </div>
+    <!-- Tournament Blocks -->
+    <div class="row service-v1 margin-bottom-40">
+        {% for p in tournaments %}
+        <div class="col-md-4 md-margin-bottom-40">
+            <a href="/tournaments/{{ p.url }}/" style="text-decoration:none;">
+                <div class = "hidden-sm hidden-xs">
+                    <img class="img-responsive" src="{% static "main/img/service1.jpg" %}" alt="">
+                </div>
+                <h3>{{ p.name }}</h3>
+            </a>
+            <a href="http://Challonge.com/{{ p.url }}">Challonge url: {{ p.url }}</a> | {{ p.created_at }}
+            <p>{{ p.description|default:"No description"|truncatechars:200 }}</p> 
+        </div>
+
+    <!-- if last column in row -->
+    {% if forloop.counter|divisibleby:"3" and not forloop.last %}
+    </div><div class="row service-v1 margin-bottom-40">
+    {% endif %}
+
+        {% endfor %}
+
+    </div>
+    <!-- End Tournament Blocks -->
+
+    <hr class="margin-bottom-50">
+
+    <!-- Info Blocks -->
+    <div class="row">
+        <div class="col-sm-4 info-blocks">
+            <i class="icon-info-blocks fa fa-bell-o"></i>
+            <div class="info-blocks-in">
+                <h3>Awesome Design</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores quae porro consequatur aliquam, incidunt</p>
+            </div>
+        </div>
+        <div class="col-sm-4 info-blocks">
+            <i class="icon-info-blocks fa fa-hdd-o"></i>
+            <div class="info-blocks-in">
+                <h3>FontAwesome</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores quae porro consequatur aliquam, incidunt</p>
+            </div>
+        </div>
+        <div class="col-sm-4 info-blocks">
+            <i class="icon-info-blocks fa fa-lightbulb-o"></i>
+            <div class="info-blocks-in">
+                <h3>Bootstrap</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores quae porro consequatur aliquam, incidunt</p>
+            </div>
+        </div>
+    </div>
+    <!-- End Info Blocks -->
+
+   
+    <!-- Info Blocks -->
+    <div class="row">
+        <div class="col-sm-4 info-blocks">
+            <i class="icon-info-blocks fa fa-code"></i>
+            <div class="info-blocks-in">
+                <h3>SEO Ready</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores quae porro consequatur aliquam, incidunt</p>
+            </div>
+        </div>
+        <div class="col-sm-4 info-blocks">
+            <i class="icon-info-blocks fa fa-compress"></i>
+            <div class="info-blocks-in">
+                <h3>Fully Responsive</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores quae porro consequatur aliquam, incidunt</p>
+            </div>
+        </div>
+        <div class="col-sm-4 info-blocks">
+            <i class="icon-info-blocks fa fa-html5"></i>
+            <div class="info-blocks-in">
+                <h3>CSS3 + HTML5</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores quae porro consequatur aliquam, incidunt</p>
+            </div>
+        </div>
+    </div>
+    <!-- End Info Blocks -->
+
+    
+</div>
+</section>
+{% endblock %}

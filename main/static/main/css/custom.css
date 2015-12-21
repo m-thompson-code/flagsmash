@@ -5,3 +5,14 @@
 .container-fluid {
   width: 100%;
 }
+A:link {text-decoration: none; color: #AA1111;}
+A:visited {text-decoration: none; color: #AA1111;}
+A:active {text-decoration: none; color: #AA1111;}
+A:hover {text-decoration: underline; color: #AA1111;}
+
+.li-left {
+    text-align: left;
+}
+.no-bottom-margin {
+    margin-bottom: 0 !important
+}

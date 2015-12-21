@@ -1,7 +1,5 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from views.views import BracketList, BracketDetail
-from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = patterns('',
     # Examples:
@@ -9,11 +7,9 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
     url(r'^$', 'main.views.views.home', name = 'home'),
     url(r'^playerform/$', 'main.views.views.player_form', name = 'player_form'),
-    url(r'^playermatchform/$', 'main.views.views.player_match_form', name = 'player_match_form'),
-    url(r'^bracket/$', 'main.views.views.bracket', name = 'bracket'),
-    url(r'^bracket_data/$', 'main.views.views.bracket_data', name = 'bracket_data'),
-    url(r'^data/bracket/$', BracketList.as_view()),
-    url(r'^data/bracket/(?P<pk>[0-9]+)/$', BracketDetail.as_view()),
-    url(r'^player/(?P<id>\d+)/$', 'main.views.views.player_profile', name = 'player_profile'),
+    url(r'^ranking/$', 'main.views.views.ranking', name = 'ranking'),
+    url(r'^tournaments/$', 'main.views.views.tournaments', name = 'tournaments'),
+    url(r'^tournaments/(?P<id>[\w-]+)/$', 'main.views.views.tournament_details', name = 'tournament_details'),
+    url(r'^player/(?P<name>[\w-]+)/$', 'main.views.views.player_profile', name = 'player_profile'),
     url(r'^admin/', include(admin.site.urls)),
 )

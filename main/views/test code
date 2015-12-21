@@ -1,0 +1,161 @@
+def tournament_update_data():
+    no_player = Player.objects.get(name = "no_player")
+
+    players = Player.objects.all()
+    #playerSyncs = PlayerSync.objects.all()
+    #matches = PlayerMatch.objects.all().order_by("tournament").order_by("created_at")
+    tournaments = ChallongeTournament.objects.all().order_by("created_at")
+
+    #reset elo rankings back to default
+    for p in players:
+        if p = no_player:
+            p.elo = 0.0
+        else:
+            p.elo = 1200.0
+        #p.save()
+
+    for tournament in tournaments:
+        playerSyncDict[tournament.id] = PlayerSync.objects.filter(tournament=tournament)
+        matchesDict[tournament.id] = PlayerMatch.objects.filter(tournament=tournament).order_by("created_at")
+
+    #for tournament in tournaments:
+        #matches = PlayerMatch.objects.filter(tournament=tournament).order_by("created_at")
+        
+        #update begin_elo for this set of playerSyncs
+        #playerSyncs = PlayerSync.objects.filter(tournament=tournament)
+        for p in playerSyncDict[tournament.id]:
+            if p.player is not None and p.player is not no_player:
+                p.begin_elo = p.player.elo
+                #p.save()
+
+        #recalculate match data
+        for p in matchesDict[tounrament.id]:
+            changed = False
+
+            #check if playersyncs involved in this match are synced up
+            #if p.winner == None:
+            try:
+                #playerSync = PlayerSyncDict[tournament.id].get(challonge_id = p.challonge_winner_id)
+                #p.winner = playerSync.player
+                p.winner = PlayerSyncDict[tournament.id].get(challonge_id=p.challonge_winner_id).player
+                changed = True
+            except Exception:
+                moo = "moo"
+            #if p.loser == None:
+            try:
+                #playerSync = PlayerSync.objects.get(challonge_id = p.challonge_loser_id)
+                #p.loser = playerSync.player
+                p.loser = PlayerSyncDict[tournament.id].get(challonge_id=p.challonge_loser_id).player
+                changed = True
+            except Exception:
+                moo = "moo"
+
+            #if p.loser == None or p.winner == None or p.loser == no_player or p.winner == no_player:
+            #    if changed == True:
+            #        p.save()
+            #    continue
+
+            winner = players.get(id=p.winner.id)
+            loser = players.get(id=p.loser.id)
+
+            p.old_winner_elo = winner.elo
+            p.old_loser_elo = loser.elo
+
+            winner_odds = getWinOdds(p.old_winner_elo, p.old_loser_elo)
+            #loser_odds = getWinOdds(p.old_loser_elo, p.old_winner_elo)
+
+            winner.elo = getNewElo(winner.elo, winner_odds, True, 20.0)
+            loser.elo = getNewElo(loser.elo, winner_odds, False, 20.0)
+
+            p.new_winner_elo = winner.elo
+            p.new_loser_elo = loser.elo
+
+            #p.save()
+
+            #winner.save()
+            #loser.save()
+
+        #update final_elo for this set of playerSyncs
+        #playerSyncs = PlayerSync.objects.filter(tournament=tournament)
+        for p in playerSyncsDict[tournament.id]:
+            if p.player is not None and p.player is not no_player:
+                p.final_elo = p.player.elo
+                #p.save()
+
+    #save everything that has been updated
+'''
+
+def tournament_update_data():
+    no_player = Player.objects.get(name = "no_player")
+
+    players = Player.objects.all()
+    #playerSyncs = PlayerSync.objects.all()
+    #matches = PlayerMatch.objects.all().order_by("tournament").order_by("created_at")
+    tournaments = ChallongeTournament.objects.all().order_by("created_at")
+
+    #reset elo rankings back to default
+    for p in players:
+        p.elo = 1200.0
+        p.save()
+
+    for tournament in tournaments:
+        matches = PlayerMatch.objects.filter(tournament=tournament).order_by("created_at")
+        
+        #update begin_elo for this set of playerSyncs
+        playerSyncs = PlayerSync.objects.filter(tournament=tournament)
+        for p in playerSyncs:
+            if p.player is not None and p.player is not no_player:
+                p.begin_elo = p.player.elo
+                p.save()
+
+        #recalculate match data
+        for p in matches:
+            changed = False
+
+            #check if playersyncs involved in this match are synced up
+            if p.winner == None:
+                try:
+                    playerSync = PlayerSync.objects.get(challonge_id = p.challonge_winner_id)
+                    p.winner = playerSync.player
+                    changed = True
+                except:
+                    pass
+            if p.loser == None:
+                try:
+                    playerSync = PlayerSync.objects.get(challonge_id = p.challonge_loser_id)
+                    p.loser = playerSync.player
+                    changed = True
+                except:
+                    pass
+            if p.loser == None or p.winner == None or p.loser == no_player or p.winner == no_player:
+                if changed == True:
+                    p.save()
+                continue
+
+            winner = Player.objects.get(id=p.winner.id)
+            loser = Player.objects.get(id=p.loser.id)
+
+            p.old_winner_elo = winner.elo
+            p.old_loser_elo = loser.elo
+
+            winner_odds = getWinOdds(winner.elo, loser.elo)
+            #loser_odds = getWinOdds(p.old_loser_elo, p.old_winner_elo)
+
+            winner.elo = getNewElo(winner.elo, winner_odds, True, 20.0)
+            loser.elo = getNewElo(loser.elo, winner_odds, False, 20.0)
+
+            p.new_winner_elo = winner.elo
+            p.new_loser_elo = loser.elo
+
+            p.save()
+
+            winner.save()
+            loser.save()
+
+        #update final_elo for this set of playerSyncs
+        playerSyncs = PlayerSync.objects.filter(tournament=tournament)
+        for p in playerSyncs:
+            if p.player is not None and p.player is not no_player:
+                p.final_elo = p.player.elo
+                p.save()
+'''

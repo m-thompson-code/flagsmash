@@ -1,2 +1,11 @@
 <p> Username: {{ player.user.username }} </p>
-<p> tag: {{ player.tag }} </p>
+<p> Name: {{ player.name }} </p>
+<p> Elo: {{ player.elo }} </p>
+<p> Elo Delta List </p>
+{% for p in matches %}
+<div>
+    <p> Match Identifier: {{ p.identifier }} Tournament: {{ p.tournament.name }} | url: {{ p.tournament.url }}</p>
+    <p> {{ p.winner.name }} | {{ p.new_winner_elo }} (+{{ p.winner_elo_delta }}) >= {{ p.loser.name }} | {{ p.new_loser_elo }} ({{ p.loser_elo_delta }})</p>
+    <p></p>
+</div>
+{% endfor %}
